@@ -80,3 +80,13 @@ void button(String name, color c, float x, float y){
   
 }
 
+void analyze(){
+  
+  for (int i = 0; i < width; i++) {
+    for (int j=0; j < height; j++) {
+      dot[i][j] = color(255);
+    }
+  }
+  
+}
+
