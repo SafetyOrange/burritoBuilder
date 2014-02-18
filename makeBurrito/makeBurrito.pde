@@ -2,27 +2,37 @@ import spacebrew.*;
 
 String server= "sandbox.spacebrew.cc";
 String name="burritoBuilder";
-String description ="Sending burrito data since 1982";
+String description ="";
 
 Spacebrew sb;
-JSONObject burrito = new JSONObject();
+JSONObject Burrito = new JSONObject();
+
+int area;
 
 color[][] dot = new color[600][600];
 float brushSize = 50;
 float burrW;
 float burrH;
-color mark= color(255, 102, 204);
+color mark= color(255);
+
+int meat=0;
+int guac=0;
+int chee=0;
+int bean=0;
+int salsa=0;
 
 
 void setup() {
   size(600, 600);
 
   sb = new Spacebrew( this );
-  sb.addPublish ("Sender", "Burrito", burrito.toString());
+  sb.addPublish ("Sender", "burrito", Burrito.toString());
   sb.connect(server, name, description);
 
   burrW = width/1.5;
   burrH = height/1.5;
+  area = int(PI*(burrW/2-5)*(burrW/2-5));
+
   noCursor();
 
   for (int i = 0; i < width; i++) {
@@ -52,6 +62,7 @@ void draw() {
   ellipse(width/2, height/2, burrW, burrH);
 
   paint();
+  analyze();
 
   button("Meats", color(#863D01), 20, 100);
   button("Guac", color(#9ECB77), 20, 200);
@@ -60,10 +71,13 @@ void draw() {
   button("Salsa", color(#C43400), 20, 500);
 
   stroke(150);
-  noFill();
+  fill(mark);
   ellipse(mouseX, mouseY, brushSize, brushSize);
-}
 
+
+
+  sb.send("Sender", "burrito", Burrito.toString());
+}
 void paint() {
   if (mousePressed && 
     mouseX>0 &&
@@ -89,17 +103,58 @@ void button(String name, color c, float x, float y) {
   text(name, x, y-10);
   fill(c);
   rect(x, y, 50, 50);
+
+  if (mousePressed &&
+    mouseX>x &&
+    mouseX<x+50 &&
+    mouseY>y &&
+    mouseY<y+50) {
+    mark = c;
+  }
 }
 
 void analyze() {
+  loadPixels();
+  meat=0;
+  guac=0;
+  chee=0;
+  bean=0;
+  salsa=0;  
+
+  color m = color(#863D01);
+  color g = color(#9ECB77);
+  color c = color(#E8D634);
+  color b = color(#A58A5D);
+  color s = color(#C43400);
+
 
   for (int i = 0; i < width; i++) {
-    for (int j=0; j < height; j++) {
-      // build JSON object with an x and a y
-      //      outgoing.setInt("Meat", mouseX);
-      //      outgoing.setInt("y", mouseY);
-      //      dot[i][j] = color(255);
+    for (int j = 0; j < height; j++) {
+      if (dist(i, j, width/2, height/2) <= burrW/2) {
+
+        if(pixels[(j*width)+i]==m) meat+=1;
+        if (dot[i][j]==g) guac+=1;
+        if (dot[i][j]==c) chee+=1;
+        if (dot[i][j]==b) bean+=1;
+        if (dot[i][j]==s) salsa+=1;
+      }
     }
   }
+
+  meat=meat*100/area;
+  guac=guac*100/area;
+  chee=chee*100/area;
+  bean=bean*100/area;
+  salsa=salsa*100/area;
+println(meat, guac, chee, bean, salsa);
+//  println(area);
+
+  Burrito.setInt("meat", meat);
+  Burrito.setInt("guac", guac);
+  Burrito.setInt("chee", chee);
+  Burrito.setInt("bean", bean);
+  Burrito.setInt("salsa", salsa);
+
+  sb.send("Sender", "burrito", Burrito.toString());
 }
 
