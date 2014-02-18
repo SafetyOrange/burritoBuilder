@@ -146,7 +146,6 @@ void analyze() {
   chee=chee*100/area;
   bean=bean*100/area;
   salsa=salsa*100/area;
-println(meat, guac, chee, bean, salsa);
 //  println(area);
 
   Burrito.setInt("meat", meat);
