@@ -5,7 +5,6 @@ float burrW;
 float burrH;
 color mark= color(255, 102, 204);
 
-color c = color(0);
 
 void setup() {
   size(600, 600);
@@ -22,6 +21,8 @@ void setup() {
 }
 
 void draw() {
+  textSize(32);
+  text("Burrito Builder v0.1", 50, 20);
 
   for (int i=0; i < width; i++) {
     for (int j=0; j < height; j++) {
@@ -39,6 +40,12 @@ void draw() {
   ellipse(width/2, height/2, burrW, burrH);
 
   paint();
+
+  button("Meats", color(#863D01), 20, 100);
+  button("Guac", color(#9ECB77), 20, 200);
+  button("Chee", color(#E8D634), 20, 300);
+  button("Bean", color(#A58A5D), 20, 400);
+  button("Salsa", color(#C43400), 20, 500);
 
   stroke(150);
   noFill();
@@ -62,5 +69,14 @@ void paint() {
       }
     }
   }
+}
+
+void button(String name, color c, float x, float y){
+ fill(0);
+ textSize(20);
+ text(name, x,y-10);
+ fill(c);
+ rect(x,y,50,50);
+  
 }
 
