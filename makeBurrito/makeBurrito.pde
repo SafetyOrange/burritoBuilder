@@ -1,4 +1,12 @@
-int area = int(PI*600*600);
+import spacebrew.*;
+
+String server= "sandbox.spacebrew.cc";
+String name="burritoBuilder";
+String description ="Sending burrito data since 1982";
+
+Spacebrew sb;
+JSONObject burrito = new JSONObject();
+
 color[][] dot = new color[600][600];
 float brushSize = 50;
 float burrW;
@@ -8,10 +16,14 @@ color mark= color(255, 102, 204);
 
 void setup() {
   size(600, 600);
+
+  sb = new Spacebrew( this );
+  sb.addPublish ("Sender", "Burrito", burrito.toString());
+  sb.connect(server, name, description);
+
   burrW = width/1.5;
   burrH = height/1.5;
   noCursor();
-  println(area);
 
   for (int i = 0; i < width; i++) {
     for (int j=0; j < height; j++) {
@@ -26,13 +38,13 @@ void draw() {
 
   for (int i=0; i < width; i++) {
     for (int j=0; j < height; j++) {
-      set(i,j , dot[i][j]);
+      set(i, j, dot[i][j]);
     }
   }
-  
+
   fill(0);
   textSize(32);
-  text("Burrito Builder v0.1", 150,30);
+  text("Burrito Builder v0.1", 150, 30);
 
   stroke(0);
   strokeWeight(5);
@@ -62,8 +74,8 @@ void paint() {
 
     for (int i = 0; i < width; i++) {
       for (int j=0; j < height; j++) {
-        if (dist(i,j, mouseX, mouseY)<=brushSize/2 &&
-            dist(i, j, width/2, height/2) <= burrW/2) {
+        if (dist(i, j, mouseX, mouseY)<=brushSize/2 &&
+          dist(i, j, width/2, height/2) <= burrW/2) {
           dot[i][j]=mark;
         }
       }
@@ -71,22 +83,23 @@ void paint() {
   }
 }
 
-void button(String name, color c, float x, float y){
- fill(0);
- textSize(20);
- text(name, x,y-10);
- fill(c);
- rect(x,y,50,50);
-  
+void button(String name, color c, float x, float y) {
+  fill(0);
+  textSize(20);
+  text(name, x, y-10);
+  fill(c);
+  rect(x, y, 50, 50);
 }
 
-void analyze(){
-  
+void analyze() {
+
   for (int i = 0; i < width; i++) {
     for (int j=0; j < height; j++) {
-      dot[i][j] = color(255);
+      // build JSON object with an x and a y
+      //      outgoing.setInt("Meat", mouseX);
+      //      outgoing.setInt("y", mouseY);
+      //      dot[i][j] = color(255);
     }
   }
-  
 }
 
